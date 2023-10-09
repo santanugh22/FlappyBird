@@ -90,7 +90,7 @@ class Plane(pygame.sprite.Sprite):
 
         self.apply_gravity(dt)
         self.animate()
-        self.rotate(dt)
+        self.rotate()
 
 
 

@@ -32,6 +32,11 @@ class Game:
 
         # this is the obstacles sprite group
         self.collisonSprites=pygame.sprite.Group()
+
+
+        # timer
+        self.obstacle_timer=pygame.USEREVENT+1
+        pygame.time.set_timer(self.obstacle_timer,1400)
     def run(self):
         last_time=time.time()
         while True:
@@ -46,6 +51,9 @@ class Game:
                     sys.exit()
                 if event.type==pygame.MOUSEBUTTONDOWN:
                     self.plane.jump()
+                if event.type==self.obstacle_timer:
+                    Obstacles(self.all_sprites,self.scale_factor)
+            
 
             self.display_surface.fill('pink')
             self.all_sprites.update(dt)

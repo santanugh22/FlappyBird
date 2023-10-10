@@ -2,7 +2,8 @@ import pygame
 
 
 from settings import *
-from random import randint
+from random import randint,choice
+
 
 
 class BG(pygame.sprite.Sprite):
@@ -83,7 +84,7 @@ class Plane(pygame.sprite.Sprite):
     def animate(self):
         self.image=self.frames[randint(0,len(self.frames)-1)]
 
-    def rotate(self,dt):
+    def rotate(self):
         self.image=pygame.transform.rotozoom(self.image,-self.direction,1)
     
     def update(self,dt):
@@ -91,6 +92,32 @@ class Plane(pygame.sprite.Sprite):
         self.apply_gravity(dt)
         self.animate()
         self.rotate()
+
+
+class Obstacles(pygame.sprite.Sprite):
+    def __init__(self,group,scale_factor):
+        super().__init__(group)
+        orientation=choice(('up','down'))
+        surf=pygame.image.load(f'./graphics/obstacles/{choice((0,1))}.png')
+        self.image=pygame.transform.scale(surf,pygame.Vector2(surf.get_size())*scale_factor)
+        x=WINDOW_WIDTH+randint(40,100)
+        if orientation=='down':
+            y=randint(-50,-10)
+            self.image=pygame.transform.flip(self.image,False,True)
+            self.rect=self.image.get_rect(midtop=(x,y))
+        else:
+            y=WINDOW_HEIGHT+randint(10,50)
+            self.rect=self.image.get_rect(midbottom=(x,y))
+
+
+        self.pos=pygame.Vector2(self.rect.topleft)
+
+    def update(self,dt):
+        self.pos.x-=(dt/1000)*400
+        self.rect.x=round(self.pos.x)
+
+        if self.rect.right<=-100:
+            self.kill()
 
 
 
